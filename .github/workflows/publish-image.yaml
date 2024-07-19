@@ -13,4 +13,5 @@ jobs:
           docker build . -t asidhu0/toy-workflow:latest
       - name: publish
         run: |
+          docker login -u asidhu0 -p ${{ secrets.DOCKER_HUB_TOKEN }}
           docker push asidhu0/toy-workflow:latest
