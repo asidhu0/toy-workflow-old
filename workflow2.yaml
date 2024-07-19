@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: workflow-2-
+spec:
+  serviceAccountName: argo
+  entrypoint: main
+  volumes:
+  - name: workdir
+    persistentVolumeClaim:
+      claimName: my-existing-volume
+
+  templates:
+  - name: main
+    steps:
+    - - name: step4
+        template: run-step-4
+    - - name: step5
+        template: run-step-5
+    - - name: step6
+        template: run-step-6
+
+  - name: run-step-4
+    container:
+      image: asidhu0/step4:1.2
+      volumeMounts:
+      - name: workdir
+        mountPath: /mnt/vol
+  
+  - name: run-step-5
+    container:
+      image: asidhu0/step5:1.2
+      volumeMounts:
+      - name: workdir
+        mountPath: /mnt/vol
+
+  - name: run-step-6
+    container:
+      image: asidhu0/step6:1.2
+      volumeMounts:
+      - name: workdir
+        mountPath: /mnt/vol

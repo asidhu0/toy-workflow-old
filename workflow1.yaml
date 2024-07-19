@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: toy-workflow-
+spec:
+  serviceAccountName: argo
+  entrypoint: main
+  volumes:
+  - name: workdir
+    persistentVolumeClaim:
+      claimName: my-existing-volume
+
+  # templates:
+  # - name: main
+  #   steps:
+  #   - - name: step1
+  #       template: run-step-1
+  #   - - name: step2
+  #       template: run-step-2
+  #   - - name: step3
+  #       template: run-step-3
+  templates:
+  - name: main
+    dag:
+      tasks:
+      - name: step1
+        template: run-step-1
+      - name: step2
+        template: run-step-2
+        dependencies: [step1]
+      - name: step3
+        template: run-step-3
+        dependencies: [step1]
+
+  - name: run-step-1
+    container:
+      image: asidhu0/toy-workflow:latest
+      volumeMounts:
+      - name: workdir
+        mountPath: /mnt/vol
+      command: ["python"]
+      args: ["./step1.py"]
+  
+  - name: run-step-2
+    container:
+      image: asidhu0/toy-workflow:latest
+      volumeMounts:
+      - name: workdir
+        mountPath: /mnt/vol
+      command: ["python"]
+      args: ["./step2.py", "/mnt/vol/datasets_to_run.txt"]
+
+  - name: run-step-3
+    container:
+      image: asidhu0/toy-workflow:latest
+      volumeMounts:
+      - name: workdir
+        mountPath: /mnt/vol
+      command: ["python"]
+      args: ["./step3.py", "/mnt/vol/datasets_to_run.txt"]
