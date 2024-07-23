@@ -1,7 +1,7 @@
 import os
 
 def detemineDatasetsToRun():
-    print("In detemine datasets to run try 17")
+    print("In detemine datasets to run try 18")
     for root, dirs, files in os.walk('.'):
         print(f"Root: {root}")
         for dir in dirs:
