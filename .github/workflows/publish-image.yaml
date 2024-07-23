@@ -1,9 +1,9 @@
 name: Publish image to Docker Hub
 on:
-  push
+  push:
     tags:
         - 'v*'
-
+  
 jobs:
   publish_image:
     runs-on: ubuntu-latest
