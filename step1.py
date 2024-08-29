@@ -30,7 +30,6 @@ def detemineDatasetsToRun():
         for file in files:
             print(f"File: {os.path.join(root, file)}")
     file_path = '/mnt/vol/datasets_to_run.txt'
-    file_path = './datasets_to_run.txt'
     with open(file_path, 'r') as file_list:
         json.dump([line.strip() for line in file_list], sys.stdout)
 
