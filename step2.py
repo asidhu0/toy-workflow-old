@@ -43,6 +43,8 @@ import json
 def doubleNumbers(read_data):
     try:
         input_data = json.loads(sys.argv[1])
+        print(input_data)
+        print(type(input_data))
         input_number = int(input_data)
         result = input_number * 2
         print(result)
