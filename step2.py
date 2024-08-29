@@ -41,18 +41,18 @@ import sys
 import json
 
 def doubleNumbers(read_data):
-    try:
-        print(sys.argv[1])
-        print(type(sys.argv[1]))
-        # input_data = json.loads(sys.argv[1])
-        # print(input_data)
-        # print(type(input_data))
-        input_number = int(input_data)
-        result = input_number * 2
-        print(result)
-    except ValueError:
-        print(f"Error: '{sys.argv[1]}' is not a valid number")
-        sys.exit(1)
+    # try:
+    print(sys.argv[1])
+    print(type(sys.argv[1]))
+    # input_data = json.loads(sys.argv[1])
+    # print(input_data)
+    # print(type(input_data))
+    input_number = int(sys.argv[1])
+    result = input_number * 2
+    print(result)
+    # except ValueError:
+    #     print(f"Error: '{sys.argv[1]}' is not a valid number")
+    #     sys.exit(1)
 
 doubleNumbers(sys.argv[1])
 
