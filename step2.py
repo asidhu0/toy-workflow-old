@@ -42,7 +42,8 @@ import json
 
 def doubleNumbers(read_data):
     try:
-        input_number = int(sys.argv[1])
+        input_data = json.loads(sys.argv[1])
+        input_number = int(input_data)
         result = input_number * 2
         print(result)
     except ValueError:
