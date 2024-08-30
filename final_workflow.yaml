@@ -1,0 +1,77 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: double-numbers-
+spec:
+  serviceAccountName: argo
+  entrypoint: main
+  volumes:
+  - name: workdir
+    persistentVolumeClaim:
+      claimName: my-existing-volume
+
+  templates:
+    - name: main
+      steps:
+        - - name: determine-datasets
+            template: determine-datasets
+        - - name: process-items
+            template: process-item
+            arguments:
+              parameters:
+              - name: number
+                value: "{{item}}"
+            withParam: "{{steps.determine-datasets.outputs.result}}"
+
+    - name: determine-datasets
+      container:
+        image: asidhu0/toy-workflow:latest
+        volumeMounts:
+        - name: workdir
+          mountPath: /mnt/vol
+        command: ["python"]
+        args: ["./step1.py"]
+
+    - name: process-item
+      inputs:
+          parameters:
+          - name: number
+      dag:
+        tasks:
+          - name: double-numbers
+            template: double-numbers
+            arguments:
+              parameters:
+                - name: number
+                  value: "{{inputs.parameters.number}}"
+          - name: subtract-numbers
+            dependencies: [double-numbers]
+            template: subtract-numbers
+            arguments:
+              parameters:
+                - name: number
+                  value: "{{tasks.double-numbers.outputs.result}}"
+
+    - name: double-numbers
+      inputs:
+        parameters:
+        - name: number
+      container:
+        image: asidhu0/toy-workflow:latest
+        volumeMounts:
+        - name: workdir
+          mountPath: /mnt/vol
+        command: ["python"]
+        args: ["./step2.py", "{{inputs.parameters.number}}"]
+
+    - name: subtract-numbers
+      inputs:
+        parameters:
+        - name: number
+      container:
+        image: asidhu0/toy-workflow:latest
+        volumeMounts:
+        - name: workdir
+          mountPath: /mnt/vol
+        command: ["python"]
+        args: ["./step3.py", "{{inputs.parameters.number}}"]
