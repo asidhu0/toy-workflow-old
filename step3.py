@@ -48,4 +48,4 @@ def subtractOne(read_data):
     with open(output_path, 'w') as output_file:
         output_file.write(str(result))
 
-doubleNumbers(sys.argv[1])
+subtractOne(sys.argv[1])
